@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ចូលរួមក្រុម Telegram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #12121c;
+      --accent: #7c5cfc;
+      --accent2: #f05cfc;
+      --neon: #5cf0fc;
+      --text: #f0eeff;
+      --muted: #9988cc;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Kantumruy Pro', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* BACKGROUND */
+    .bg-blob { position: fixed; border-radius: 50%; filter: blur(90px); opacity: 0.18; pointer-events: none; z-index: 0; }
+    .blob1 { width: 600px; height: 600px; background: var(--accent); top: -150px; left: -150px; animation: floatA 10s ease-in-out infinite; }
+    .blob2 { width: 500px; height: 500px; background: var(--accent2); bottom: -100px; right: -100px; animation: floatB 12s ease-in-out infinite; }
+    .blob3 { width: 350px; height: 350px; background: var(--neon); top: 40%; left: 40%; animation: floatA 14s ease-in-out infinite reverse; }
+    @keyframes floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-30px)} }
+    @keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(25px)} }
+
+    .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .star { position: absolute; background: #fff; border-radius: 50%; animation: twinkle var(--d) ease-in-out infinite; opacity: 0; }
+    @keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:var(--o)} }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 14px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(10,10,15,0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(124,92,252,0.15);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 17px; font-weight: 700; color: var(--text); text-decoration: none;
+    }
+
+    /* =============================================
+       NAV PROFILE IMAGE
+       ► ប្តូរ src="your-image.png" ជា PNG របស់អ្នក
+       ============================================= */
+    .nav-logo .nav-img {
+      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--accent);
+      background: #1a1a2e;
+    }
+    .nav-logo .nav-fallback {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: none; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-join {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; border: none; border-radius: 100px;
+      padding: 9px 22px; font-family: 'Kantumruy Pro', sans-serif;
+      font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: all 0.3s; white-space: nowrap;
+    }
+    .nav-join:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(124,92,252,0.5); }
+
+    /* SECTIONS */
+    section { position: relative; z-index: 1; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 130px 24px 90px;
+    }
+
+    /* =============================================
+       HERO PROFILE IMAGE
+       ► ប្តូរ src="your-image.png" ជា PNG របស់អ្នក
+       ============================================= */
+    .profile-ring {
+      width: 148px; height: 148px; border-radius: 50%; padding: 4px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--neon));
+      margin-bottom: 28px;
+      box-shadow: 0 0 60px rgba(124,92,252,0.5);
+      animation: pulseRing 3s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes pulseRing {
+      0%,100%{ box-shadow: 0 0 60px rgba(124,92,252,0.5); }
+      50%{ box-shadow: 0 0 100px rgba(124,92,252,0.8), 0 0 140px rgba(240,92,252,0.3); }
+    }
+    .profile-ring .hero-img {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      display: block; background: #1a1a2e;
+    }
+    .profile-ring .hero-fallback {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: #1a1a2e;
+      display: none; align-items: center; justify-content: center; font-size: 58px;
+    }
+    .online-dot-hero {
+      position: absolute; bottom: 6px; right: 6px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #2ecc71; border: 3px solid var(--bg);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .online-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(46,204,113,0.12);
+      border: 1px solid rgba(46,204,113,0.35);
+      border-radius: 100px; padding: 5px 16px;
+      font-size: 13px; color: #2ecc71; margin-bottom: 22px;
+    }
+    .online-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; animation: blink 2s infinite; }
+
+    h1.hero-title {
+      font-size: clamp(32px, 6vw, 56px); font-weight: 700; line-height: 1.2;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent), var(--neon));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: fadeUp 0.8s 0.1s both;
+    }
+    .hero-sub {
+      font-size: 17px; color: var(--muted); line-height: 1.85;
+      max-width: 430px; margin: 0 auto 36px;
+      animation: fadeUp 0.8s 0.2s both;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.8s 0.3s both; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 17px 34px; border-radius: 100px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; font-family: 'Kantumruy Pro', sans-serif;
+      font-size: 16px; font-weight: 700; text-decoration: none;
+      box-shadow: 0 8px 32px rgba(124,92,252,0.4);
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer { 0%{left:-100%} 100%{left:200%} }
+    .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 40px rgba(124,92,252,0.6); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 17px 28px; border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text); font-family: 'Kantumruy Pro', sans-serif;
+      font-size: 16px; font-weight: 600; text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover { background: rgba(124,92,252,0.15); border-color: var(--accent); }
+
+    .scroll-hint {
+      margin-top: 64px; color: var(--muted); font-size: 13px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      animation: fadeUp 1s 0.6s both;
+    }
+    .scroll-arrow {
+      width: 22px; height: 22px;
+      border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg); animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:rotate(45deg) translateY(0)} 50%{transform:rotate(45deg) translateY(7px)} }
+
+    /* STATS */
+    #stats {
+      padding: 110px 24px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .section-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .section-title { font-size: clamp(26px,4vw,40px); font-weight: 700; text-align: center; margin-bottom: 52px; }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 20px; max-width: 680px; width: 100%;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 34px 20px; text-align: center;
+      transition: all 0.4s;
+    }
+    .stat-card:hover { background: rgba(124,92,252,0.1); border-color: rgba(124,92,252,0.3); transform: translateY(-6px); }
+    .stat-num { font-size: 38px; font-weight: 700; background: linear-gradient(135deg,var(--accent),var(--neon)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .stat-label { font-size: 14px; color: var(--muted); margin-top: 7px; }
+
+    /* FEATURES */
+    #features {
+      padding: 110px 24px;
+      display: flex; flex-direction: column; align-items: center;
+      background: rgba(255,255,255,0.015);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 18px; max-width: 720px; width: 100%;
+    }
+    .feat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 28px 22px;
+      display: flex; gap: 18px; align-items: flex-start;
+      transition: all 0.4s;
+    }
+    .feat-card:hover { background: rgba(124,92,252,0.1); border-color: rgba(124,92,252,0.3); transform: translateY(-4px); }
+    .feat-icon { width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; background: rgba(124,92,252,0.15); }
+    .feat-text h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .feat-text p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* CTA */
+    #cta {
+      padding: 130px 24px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .cta-box {
+      background: rgba(124,92,252,0.08);
+      border: 1px solid rgba(124,92,252,0.25);
+      border-radius: 28px; padding: 56px 40px;
+      max-width: 520px; width: 100%;
+      box-shadow: 0 0 80px rgba(124,92,252,0.15);
+    }
+
+    /* =============================================
+       CTA PROFILE IMAGE
+       ► ប្តូរ src="your-image.png" ជា PNG របស់អ្នក
+       ============================================= */
+    .cta-profile-ring {
+      width: 86px; height: 86px; border-radius: 50%; padding: 3px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      margin: 0 auto 22px;
+    }
+    .cta-profile-ring .cta-img {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      background: #1a1a2e;
+    }
+    .cta-profile-ring .cta-fallback {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: #1a1a2e;
+      display: none; align-items: center; justify-content: center; font-size: 34px;
+    }
+
+    .cta-box h2 { font-size: clamp(24px,4vw,34px); font-weight: 700; margin-bottom: 14px; }
+    .cta-box p { color: var(--muted); font-size: 15px; line-height: 1.75; margin-bottom: 32px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 28px 24px; text-align: center;
+      color: var(--muted); font-size: 13px; position: relative; z-index: 1;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* RESPONSIVE */
+    @media (max-width: 620px) {
+      nav { padding: 12px 18px; }
+      .nav-links { display: none; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cta-box { padding: 36px 20px; }
+      .hero-btns { flex-direction: column; align-items: center; }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+<div class="bg-blob blob1"></div>
+<div class="bg-blob blob2"></div>
+<div class="bg-blob blob3"></div>
+<div class="stars" id="stars"></div>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a class="nav-logo" href="#hero">
+    <!--
+      ════════════════════════════════════════
+      ★  ប្តូរ "your-image.png" ជា PNG របស់អ្នក
+         ដាក់ PNG file ក្នុង folder ដូចគ្នា
+      ════════════════════════════════════════
+    -->
+    <img class="nav-img" src="your-image.png" alt="Group"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <span class="nav-fallback">💬</span>
+    ក្រុមកម្សាន្ត
+  </a>
+  <div class="nav-links">
+    <a href="#stats">សមាជិក</a>
+    <a href="#features">លក្ខណៈ</a>
+    <a href="#cta">ចូលរួម</a>
+  </div>
+  <a class="nav-join" href="https://t.me/+-KrdTSdLktsyNzFl" target="_blank" rel="noopener">🚀 ចូលឥឡូវ</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+
+  <!--
+    ════════════════════════════════════════
+    ★  HERO PROFILE — ប្តូរ "your-image.png"
+    ════════════════════════════════════════
+  -->
+  <div class="profile-ring">
+    <img class="hero-img" src="photo_2026-05-02_01-20-48.jpg" alt="Group Profile"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="hero-fallback">💬</div>
+    <div class="online-dot-hero"></div>
+  </div>
+
+  <div class="online-badge"><div class="dot"></div> Active រៀងរាល់ថ្ងៃ</div>
+
+  <h1 class="hero-title">ក្រុមជជែកកម្សាន្ត<br/>🎉</h1>
+  <p class="hero-sub">
+    ចូលមកជជែកកម្សាន្ត<br/>
+    និយាយអំពីរឿងរន្ធត់ ហៅ Vedio Call<br/>
+    ទំនាក់ទំនងគ្នាយ៉ាងស្រួល !
+  </p>
+
+  <div class="hero-btns">
+    <a class="btn-primary" href="https://t.me/+-KrdTSdLktsyNzFl" target="_blank" rel="noopener">
+      <span>🚀</span> ចូលរួមក្រុម
+    </a>
+    <a class="btn-secondary" href="#features">
+      <span>👀</span> មើលព័ត៌មាន
+    </a>
+  </div>
+
+  <div class="scroll-hint">
+    <span>រំកិលចុះ</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section id="stats">
+  <p class="section-label reveal">ស្ថិតិក្រុម</p>
+  <h2 class="section-title reveal">ក្រុមរបស់យើង</h2>
+  <div class="stats-grid">
+    <div class="stat-card reveal reveal-delay-1">
+      <div class="stat-num">500+</div><!-- ← ប្តូរចំនួន member -->
+      <div class="stat-label">👥 សមាជិក</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-2">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">🕐 Active</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-3">
+      <div class="stat-num">🔥</div>
+      <div class="stat-label">Vibe ល្អ</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features">
+  <p class="section-label reveal">អ្វីដែលមាន</p>
+  <h2 class="section-title reveal">លក្ខណៈពិសេស</h2>
+  <div class="features-grid">
+    <div class="feat-card reveal reveal-delay-1">
+      <div class="feat-icon">😂</div>
+      <div class="feat-text">
+        <h3>ជជែកកម្សាន្ត</h3>
+        <p>និយាយកម្សាន្ត និយាយគ្នាលេង រៀងរាល់ថ្ងៃ ២៤ម៉ោង</p>
+      </div>
+    </div>
+    <div class="feat-card reveal reveal-delay-2">
+      <div class="feat-icon">👻</div>
+      <div class="feat-text">
+        <h3>រឿងរន្ធត់</h3>
+        <p>ចែករំលែករឿងខ្មោច រឿងរន្ធត់ផ្សេងៗ</p>
+      </div>
+    </div>
+    <div class="feat-card reveal reveal-delay-1">
+      <div class="feat-icon">📞</div>
+      <div class="feat-text">
+        <h3>Voice &amp; Video Call</h3>
+        <p>ហៅ Call គ្នាយ៉ាងសប្បាយ ទាំង Voice និង Video</p>
+      </div>
+    </div>
+    <div class="feat-card reveal reveal-delay-2">
+      <div class="feat-icon">🤝</div>
+      <div class="feat-text">
+        <h3>ទំនាក់ទំនង</h3>
+        <p>ស្គាល់មិត្តភក្ដិថ្មីៗ Community រស់រវើក</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section id="cta">
+  <div class="cta-box reveal">
+    <!--
+      ════════════════════════════════════════
+      ★  CTA PROFILE — ប្តូរ "your-image.png"
+      ════════════════════════════════════════
+    -->
+    <div class="cta-profile-ring">
+      <img class="cta-img" src="photo_2026-05-02_01-20-48.jpg" alt="Group"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="cta-fallback">💬</div>
+    </div>
+    <h2>រួចរាល់ចូលរួមហើយ? 🎊</h2>
+    <p>
+      ចុច Join ហើយក្លាយជាសមាជិករបស់ក្រុម<br/>
+      សប្បាយ រីករាយ ជាមួយពួកយើង!
+    </p>
+    <a class="btn-primary" href="https://t.me/+-KrdTSdLktsyNzFl" target="_blank" rel="noopener" style="display:inline-flex;margin:0 auto;">
+      <span>✈️</span> ចូលរួម Telegram ឥឡូវ
+    </a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  🔒 ក្រុម Telegram សុវត្ថិភាព &nbsp;·&nbsp; ចូលដោយឥតគិតថ្លៃ &nbsp;·&nbsp;
+  <a href="https://t.me/+-KrdTSdLktsyNzFl" target="_blank" rel="noopener">t.me/group</a>
+</footer>
+
+<script>
+  // Generate stars
+  const sc = document.getElementById('stars');
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${Math.random()*4+2}s;--o:${Math.random()*0.6+0.2};animation-delay:${Math.random()*6}s;`;
+    sc.appendChild(s);
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Smooth nav scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
